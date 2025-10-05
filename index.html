@@ -253,12 +253,18 @@ function showScrollingTitle(title) {
   scrollTitle.style.display = 'flex';
 }
 
-// Play current track
+// Updated playSample() function
 function playSample() {
-  if (!audio.src) {
-    audio.src = playlist[currentTrack].url;
-  }
-  audio.play();
+  // Always set the src to the current track URL
+  audio.src = playlist[currentTrack].url;
+  // Load the audio to ensure it's ready
+  audio.load();
+  // Set volume to maximum
+  audio.volume = 1;
+  // Play the audio and catch any errors
+  audio.play().catch(error => {
+    console.error("Error playing audio:", error);
+  });
 }
 
 // When clicking the spider
@@ -269,7 +275,7 @@ spider.addEventListener('click', () => {
   } else {
     // toggle play/pause
     if (audio.paused) {
-      audio.play();
+      playSample();
     } else {
       audio.pause();
     }
